@@ -26,6 +26,8 @@ var tests = []testPair{
 			StreetDirection: "s",
 			StreetName:      "main",
 			StreetType:      "st",
+			SuiteType:       "apt",
+			SuiteNumber:     21,
 		},
 	}, {
 		"100 South Main Street apt 212",
@@ -34,6 +36,8 @@ var tests = []testPair{
 			StreetDirection: "s",
 			StreetName:      "main",
 			StreetType:      "st",
+			SuiteType:       "apt",
+			SuiteNumber:     212,
 		},
 	}, {
 		"100 South Main Street suite 23",
@@ -42,6 +46,8 @@ var tests = []testPair{
 			StreetDirection: "s",
 			StreetName:      "main",
 			StreetType:      "st",
+			SuiteType:       "ste",
+			SuiteNumber:     23,
 		},
 	}, {
 		"100 s Main Street suite 23",
@@ -50,14 +56,27 @@ var tests = []testPair{
 			StreetDirection: "s",
 			StreetName:      "main",
 			StreetType:      "st",
+			SuiteType:       "ste",
+			SuiteNumber:     23,
 		},
 	}, {
-		"100 s Main ln suite 23",
+		"100 s Main ln apt 23",
 		Address{
 			House:           100,
 			StreetDirection: "s",
 			StreetName:      "main",
-			StreetType:      "st",
+			StreetType:      "ln",
+			SuiteType:       "apt",
+			SuiteNumber:     23,
+		},
+	}, {
+		"123 Main st suite 23",
+		Address{
+			House:       123,
+			StreetName:  "main",
+			StreetType:  "st",
+			SuiteType:   "ste",
+			SuiteNumber: 23,
 		},
 	},
 }

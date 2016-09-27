@@ -9,11 +9,20 @@ import (
 
 func Normalize(s string) (Address, error) {
 	// This iterator is for walking across the address
-	i := 0
+	var componentQueue queue
+
 	components := strings.Split(s, " ")
-	if len(components) <= 1 {
+	max := len(components)
+
+	if max <= 1 {
 		return Address{}, fmt.Errorf("That's not an address.")
 	}
+
+	for i, _ := range components {
+		components[i] = strings.ToLower(components[i])
+		componentQueue.Push(&components[i]) // First in, first out.
+	}
+
 	// 0: House Number
 	// 1: Street Direction
 	// 2: Possibly Street Direction again, example: South West Main Street
@@ -28,21 +37,71 @@ func Normalize(s string) (Address, error) {
 
 	var address Address
 	var err error
-	address.House, err = strconv.Atoi(components[i])
+	var val *string
+
+	val, err = componentQueue.Pop()
 
 	if err != nil {
-		return Address{}, fmt.Errorf("The house number %s is not valid.", components[0])
+		return Address{}, fmt.Errorf("Error when getting house number: %s\n", err.Error())
 	}
 
-	i++
+	// Convert house number to integer
+	address.House, err = strconv.Atoi(*val)
 
-	if direction, ok := CardinalDirectionAbbreviations[components[i]]; ok {
+	if err != nil {
+		return Address{}, fmt.Errorf("The house number %s is not valid.", *val)
+	}
+
+	val, err = componentQueue.Pop()
+
+	if err != nil {
+		return address, fmt.Errorf("Error when getting street direction: %s\n", err.Error())
+	}
+
+	if direction, ok := CardinalDirectionAbbreviations[*val]; ok {
 		address.StreetDirection = direction
-		i++
 	}
 
-	address.StreetName = components[i]
-	i++
+	val, err = componentQueue.Pop()
 
+	if err != nil {
+		return address, fmt.Errorf("Error when getting street name:  %s\n", err.Error())
+	}
+
+	address.StreetName = *val
+
+	val, err = componentQueue.Pop()
+
+	if err != nil {
+		return address, fmt.Errorf("Error when getting street type: %s\n", err.Error())
+	}
+
+	if streetType, ok := StreetTypeAbbreviations[*val]; ok {
+		address.StreetType = streetType
+	} else {
+		return address, fmt.Errorf("%s is not a valid street type.", *val)
+	}
+
+	val, err = componentQueue.Pop()
+
+	if err != nil {
+		return address, nil
+	}
+
+	if aptType, ok := SuiteTypeAbbreviations[*val]; ok {
+		address.SuiteType = aptType
+
+		val, err = componentQueue.Pop()
+
+		if err != nil {
+			return address, fmt.Errorf("An apartment/suite type was found, but the number was not.  Error:%s\n", err.Error())
+		}
+
+		address.SuiteNumber, err = strconv.Atoi(*val)
+
+		if err != nil {
+			return address, err
+		}
+	}
 	return address, nil
 }
