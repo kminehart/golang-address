@@ -1,5 +1,14 @@
 package main
 
+type Address struct {
+	House           int
+	StreetDirection string
+	StreetName      string
+	StreetType      string
+	SuiteType       string
+	SuiteNumber     int
+}
+
 // http://pe.usps.gov/text/pub28/28apc_002.htm
 // Include a key that matches the value (ex; "avn": "avn") to make validating valid strings easy.
 // If these change, pull requests are welcome!
@@ -697,4 +706,53 @@ var StreetTypeAbbreviations map[string]string = map[string]string{
 
 	"wells": "wls",
 	"wls":   "wls",
+}
+
+var SuiteTypeAbbreviations map[string]string = map[string]string{
+	"apartment": "apt",
+	"#":         "apt",
+	"apt":       "apt",
+
+	"building": "bldg",
+	"bldg":     "bldg",
+
+	"floor": "fl",
+	"fl":    "fl",
+
+	"suite": "ste",
+	"ste":   "ste",
+
+	"unit": "unit",
+
+	"room": "rm",
+	"rm":   "rm",
+
+	"department": "dept",
+	"dept":       "dept",
+}
+
+var CardinalDirectionAbbreviations map[string]string = map[string]string{
+	"north": "n",
+	"n":     "n",
+
+	"northwest": "nw",
+	"nw":        "nw",
+
+	"northeast": "ne",
+	"ne":        "ne",
+
+	"south": "s",
+	"s":     "s",
+
+	"southwest": "sw",
+	"sw":        "sw",
+
+	"southeast": "se",
+	"se":        "se",
+
+	"east": "e",
+	"e":    "e",
+
+	"west": "w",
+	"w":    "w",
 }
