@@ -78,6 +78,16 @@ var tests = []testPair{
 			SuiteType:   "ste",
 			SuiteNumber: 23,
 		},
+	}, {
+		"123 NorTHeast Main DRIVE apartment 235",
+		Address{
+			House:           123,
+			StreetDirection: "ne",
+			StreetName:      "main",
+			StreetType:      "dr",
+			SuiteType:       "apt",
+			SuiteNumber:     235,
+		},
 	},
 }
 
