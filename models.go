@@ -1,4 +1,4 @@
-package main
+package address
 
 type Address struct {
 	House           int
