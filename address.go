@@ -44,7 +44,6 @@ func Normalize(s string) (Address, error) {
 	if err != nil {
 		return Address{}, fmt.Errorf("Error when getting house number: %s\n", err.Error())
 	}
-
 	// Convert house number to integer
 	address.House, err = strconv.Atoi(*val)
 
@@ -52,13 +51,15 @@ func Normalize(s string) (Address, error) {
 		return Address{}, fmt.Errorf("The house number %s is not valid.", *val)
 	}
 
-	val, err = componentQueue.Pop()
+	val = componentQueue.Peek()
 
-	if err != nil {
+	if val == nil {
 		return address, fmt.Errorf("Error when getting street direction: %s\n", err.Error())
 	}
 
+	// It is maybe possible for a cardinal direction to be completely omitted.
 	if direction, ok := CardinalDirectionAbbreviations[*val]; ok {
+		val, err = componentQueue.Pop()
 		address.StreetDirection = direction
 	}
 
