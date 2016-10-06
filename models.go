@@ -6,7 +6,7 @@ type Address struct {
 	StreetName      string
 	StreetType      string
 	SuiteType       string
-	SuiteNumber     int
+	SuiteNumber     string
 }
 
 // http://pe.usps.gov/text/pub28/28apc_002.htm
@@ -152,6 +152,9 @@ var StreetTypeAbbreviations map[string]string = map[string]string{
 
 	"coves": "cvs",
 	"cvs":   "cvs",
+
+	"cr":          "county road",
+	"county road": "county road",
 
 	"creek": "crk",
 	"crk":   "crk",
@@ -729,6 +732,8 @@ var SuiteTypeAbbreviations map[string]string = map[string]string{
 
 	"department": "dept",
 	"dept":       "dept",
+
+	"box": "box",
 }
 
 var CardinalDirectionAbbreviations map[string]string = map[string]string{
@@ -755,4 +760,27 @@ var CardinalDirectionAbbreviations map[string]string = map[string]string{
 
 	"west": "w",
 	"w":    "w",
+}
+
+var RuralBoxes map[string]string = map[string]string{
+	"cr":          "county road",
+	"county road": "county road",
+
+	"rr": "rr",
+
+	"po box": "po box",
+}
+
+var Pairs map[string]string = map[string]string{
+	"po":     "box",
+	"county": "road",
+	// CR is in here because it's dumb, but this is the only street name value that _has_ to be converted.
+	// "cr": "cr",
+}
+
+var NumberRequired []string = []string{
+	"po box",
+	"rr",
+	"county road",
+	"cr",
 }
