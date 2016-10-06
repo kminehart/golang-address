@@ -1,6 +1,6 @@
 # golang-address
 
-Parser for physical US addresses.
+Normalizer / Parser for physical US addresses.
 
 # Motivation
 
