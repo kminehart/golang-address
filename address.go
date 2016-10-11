@@ -233,11 +233,11 @@ func Normalize(s string) (a Address, err error) {
 	if err != nil {
 		return Address{}, err
 	}
-	//
+
 	a.House, err = a.getHouseNumber(&t)
 	if err != nil {
 		a.finalize(&t)
-		return a, err
+		return a, nil
 	}
 
 	a.StreetType, err = a.getStreetType(&t)
