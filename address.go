@@ -220,8 +220,7 @@ func (a *Address) finalize(s *[]string) {
 	}
 }
 func Normalize(s string) (a Address, err error) {
-	// These strings will
-	t := strings.Split(s, " ")
+	t := strings.Fields(s)
 
 	// Lowercase it all.
 	for i := range t {
