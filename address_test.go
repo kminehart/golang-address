@@ -12,6 +12,22 @@ type testPair struct {
 
 var tests = []testPair{
 	{
+		"123 s asdf st",
+		Address{
+			House:           123,
+			StreetDirection: "s",
+			StreetName:      "asdf",
+			StreetType:      "st",
+		},
+	}, {
+		"123 s asdf rd",
+		Address{
+			House:           123,
+			StreetDirection: "s",
+			StreetName:      "asdf",
+			StreetType:      "rd",
+		},
+	}, {
 		"100 South Main Street",
 		Address{
 			House:           100,

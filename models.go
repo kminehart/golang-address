@@ -544,6 +544,9 @@ var StreetTypeAbbreviations map[string]string = map[string]string{
 	"ridges": "rdgs",
 	"rdgs":   "rdgs",
 
+	"road": "road",
+	"rd":   "rd",
+
 	"route": "rte",
 	"rte":   "rte",
 
