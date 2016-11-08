@@ -159,7 +159,23 @@ var tests = []testPair{
 		Address{
 			StreetName: "128.5 s main street bitch",
 		},
-	},
+	}, {
+    "100 Southwest Maple Tree Blvd",
+    Address{
+      House:  100,
+      StreetDirection: "sw",
+      StreetName: "maple tree",
+      StreetType: "blvd",
+    },
+  }, {
+    "100 S Imperial Valley Drive",
+    Address{
+      House:  100,
+      StreetDirection: "s",
+      StreetName: "imperial valley",
+      StreetType: "dr",
+    },
+  },
 }
 
 func TestNormalize(t *testing.T) {

@@ -44,13 +44,20 @@ func (a *Address) getStreetDirection(s *[]string) (string, error) {
 //	IF no street-types are in the string that match the streettypeabbreviations map,
 //	THEN an empty string will be returned.
 func (a *Address) getStreetType(s *[]string) (string, error) {
+  var t string
+  var m int
 	for i, e := range *s {
 		if n, ok := StreetTypeAbbreviations[e]; ok {
-			del(s, i)
-			return n, nil
+      m = i
+      t = n
+			// return n, nil
 		}
 	}
-	return "", fmt.Errorf("No suitable street type was found in the address.")
+  if t == "" {
+    return "", fmt.Errorf("No suitable street type was found in the address.")
+  }
+  del(s, m)
+  return t, nil
 }
 
 // Will return the first non-numeric element in the array of strings
