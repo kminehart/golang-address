@@ -3,6 +3,7 @@ package address
 
 import (
 	"fmt"
+  "regexp"
 	"strconv"
 	"strings"
 )
@@ -48,6 +49,15 @@ func (a *Address) getStreetType(s *[]string) (string, error) {
   var m int
 	for i, e := range *s {
 		if n, ok := StreetTypeAbbreviations[e]; ok {
+      // Is there anything proceeding the street type?
+      if len(*s) > i + 1 {
+        if isAbbreviation((*s)[i+1]) == true {
+          // Is it "apt", "suite", "s"...?
+          // then do nothing
+        } else {
+          return "", nil
+        }
+      }
       m = i
       t = n
 			// return n, nil
@@ -60,6 +70,21 @@ func (a *Address) getStreetType(s *[]string) (string, error) {
   return t, nil
 }
 
+func isAbbreviation(s string) bool {
+  if _, ok := StreetTypeAbbreviations[s]; ok {
+    return true
+  }
+  if _, ok := CardinalDirectionAbbreviations[s]; ok {
+    return true
+  }
+  if _, ok := RuralBoxes[s]; ok {
+    return true
+  }
+  if _, ok := SuiteTypeAbbreviations[s]; ok {
+    return true
+  }
+  return false
+}
 // Will return the first non-numeric element in the array of strings
 // that does not exist in any of the "abbreviation" maps.
 //   IF there no non-numeric strings that do not exist in any of the maps,
@@ -80,18 +105,10 @@ func (a *Address) getStreetName(s *[]string) (r string, err error) {
 		if err == nil {
 			continue
 		}
-		if _, ok := StreetTypeAbbreviations[e]; ok {
-			continue
-		}
-		if _, ok := CardinalDirectionAbbreviations[e]; ok {
-			continue
-		}
-		if _, ok := RuralBoxes[e]; ok {
-			continue
-		}
-		if _, ok := SuiteTypeAbbreviations[e]; ok {
-			continue
-		}
+
+    if isAbbreviation(e) == true {
+      continue
+    }
 
 		removeQueue.Push(i)
 		r = e
@@ -218,6 +235,7 @@ func (a *Address) finalize(s *[]string) {
 	if len(*s) <= 0 {
 		return
 	}
+
 	for i := 0; i < len(*s); i++ {
 		st := strings.Join([]string{
 			a.StreetName,
@@ -227,6 +245,10 @@ func (a *Address) finalize(s *[]string) {
 	}
 }
 func Normalize(s string) (a Address, err error) {
+  if err != nil {
+    return Address{}, err
+  }
+
 	t := strings.Fields(s)
 
 	// Lowercase it all.
@@ -234,6 +256,17 @@ func Normalize(s string) (a Address, err error) {
 		t[i] = strings.ToLower(t[i])
 	}
 
+  // Strip out miscellaneous characters.
+  regIsNumeric, err := regexp.Compile("^(\\d|\\.)+$")
+  regMatchInvalid, err := regexp.Compile("[^a-zA-Z\\d\\s:]")
+
+  for i := range t {
+    // Match numeric fields and don't replace their decimals.
+    if regIsNumeric.MatchString(t[i]) == false {
+      // Remove stray periods and whatnot.
+      t[i] = regMatchInvalid.ReplaceAllString(t[i], "")
+    }
+  }
 	// Every address has a street name.  Start with that.
 	a.StreetName, err = a.getStreetName(&t)
 	if err != nil {
