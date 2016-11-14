@@ -152,7 +152,7 @@ var tests = []testPair{
 	}, {
 		"stupid shitty address that doesn't validate.",
 		Address{
-			StreetName: "stupid shitty address that doesn't validate.",
+			StreetName: "stupid shitty address that doesnt validate",
 		},
 	}, {
 		"128.5 s main street bitch",
@@ -174,6 +174,25 @@ var tests = []testPair{
       StreetDirection: "s",
       StreetName: "imperial valley",
       StreetType: "dr",
+    },
+  }, {
+    "100 s. weird. st.",
+    Address{
+      House: 100,
+      StreetDirection: "s",
+      StreetName: "weird",
+      StreetType: "st",
+    },
+  }, {
+    "221b s main st",
+    Address{
+      StreetName: "221b s main st",
+    },
+  }, {
+    "221 completely unrecognizable street name",
+    Address{
+      House: 221,
+      StreetName: "completely unrecognizable street name",
     },
   },
 }
