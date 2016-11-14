@@ -194,6 +194,13 @@ var tests = []testPair{
       House: 221,
       StreetName: "completely unrecognizable street name",
     },
+  }, {
+    "100 Circle Drive",
+    Address{
+      House: 100,
+      StreetName: "circle",
+      StreetType: "dr",
+    },
   },
 }
 

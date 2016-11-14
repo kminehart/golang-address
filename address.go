@@ -100,6 +100,7 @@ func (a *Address) getStreetName(s *[]string) (r string, err error) {
 	// The indices to remove at the end of the function.
 	var removeQueue queue
 
+  // Find the first non-number, non-abbreviation
 	for i, e := range *s {
 		_, err := strconv.Atoi(e)
 		if err == nil {
@@ -115,6 +116,8 @@ func (a *Address) getStreetName(s *[]string) (r string, err error) {
 		break
 	}
 
+  // If nothing was found then try again and grab the first
+  // * Cardinal Direction, "PO"/"RR"/etc, or "Suite"/"Apartment"/etc.
 	if r == "" {
 		for i, e := range *s {
 			_, err := strconv.Atoi(e)
@@ -138,6 +141,31 @@ func (a *Address) getStreetName(s *[]string) (r string, err error) {
 			}
 		}
 	}
+
+  // Still nothing?
+  // Then grab the first street direction or the first street type.
+  if r == "" {
+    for i, e := range *s {
+			_, err := strconv.Atoi(e)
+			if err == nil {
+				continue
+			}
+
+      // Street type
+      if _, ok := StreetTypeAbbreviations[e]; ok {
+        r = e
+        removeQueue.Push(i)
+        break
+      }
+
+      // Street Direction
+      if _, ok := CardinalDirectionAbbreviations[e]; ok {
+        r = e
+        removeQueue.Push(i)
+        break
+      }
+    }
+  }
 
 	if p, ok := Pairs[r]; ok {
 		var n string
@@ -270,7 +298,8 @@ func Normalize(s string) (a Address, err error) {
 	// Every address has a street name.  Start with that.
 	a.StreetName, err = a.getStreetName(&t)
 	if err != nil {
-		return Address{}, err
+		a.finalize(&t)
+		return a, err
 	}
 
 	a.House, err = a.getHouseNumber(&t)
