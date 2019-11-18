@@ -2,6 +2,10 @@
 
 Normalizer / Parser for physical US addresses.
 
+# Disclaimer
+
+you probably should use [gopostal](https://github.com/openvenues/gopostal) instead of this.
+
 # Motivation
 
 Is your inherited legacy system getting you down?
